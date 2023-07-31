@@ -4,11 +4,13 @@
   "description": "TrackGols is a personalized web application designed for users to effectively track and manage their goals. This web application provides users with customizable goal tracking capabilities, enabling them to set goals, create columns, and visually track their progress by seamlessly dragging and dropping goals across different columns. With TrackGols, achieving your goals and keeping yourself accountable has never been more easy and fun!",
   "main": "index.js",
   "scripts": {
+    "start": "npm install && nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Angie Tran",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "joi": "^17.9.2",
     "lodash": "^4.17.21",

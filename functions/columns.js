@@ -1,15 +1,27 @@
-export const getColumn = (req, res) => { }
 
-export const updateColumn = (req, res) => {
+const columnsCollection = "columns"
+
+const getColumn = (req, res) => { }
+
+const updateColumn = (req, res) => {
     res.send({ "message": "Column successfully updated" })
 }
 
-export const deleteColumn = (req, res) => {
+const deleteColumn = (req, res) => {
     res.send({ "message": "Column successfully deleted" })
 }
 
-export const getCards = (req, res) => { }
+const getCards = (req, res) => { }
 
-export const postCards = (req, res) => {
+const postCards = (req, res) => {
     res.send({ "message": "Card successfully created" })
+}
+
+module.exports = {
+    columnsCollection,
+    getColumn,
+    updateColumn,
+    deleteColumn,
+    getCards,
+    postCards
 }

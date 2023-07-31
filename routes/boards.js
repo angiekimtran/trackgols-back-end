@@ -1,19 +1,22 @@
 const express = require("express")
+const board = require("../functions/boards")
+
 const router = express.Router()
 
 // get a board
-router.get('/<id>', getBoard)
+router.get('/:id', board.getBoard)
 
 // update a board
-router.put('/<id>', updateBoard)
+router.put('/:id', board.updateBoard)
 
 // get all columns
-router.get('/<id>/columns', getColumns)
+router.get('/:id/columns', board.getColumns)
 
 // create a column
-router.post('/<id>/columns', createColumn)
+router.post('/:id/columns', board.createColumn)
 
 module.exports = router
+
 
 // STRETCH GOALS BELOW //
 
