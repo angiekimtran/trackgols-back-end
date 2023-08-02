@@ -7,8 +7,8 @@ const { cardsCollection, cardsSchema } = require("./cards")
 const columnsCollection = "columns"
 const columnsSchema = Joi.object({
     _id: Joi.object(),
-    boardID: Joi.object().required(),
-    title: Joi.string().min(1).max(50).required()
+    title: Joi.string().min(1).max(50).required(),
+    cards: Joi.array().default([])
 })
 const getColumn = async (req, res) => {
     const db = await connect()

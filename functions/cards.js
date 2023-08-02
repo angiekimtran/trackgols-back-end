@@ -5,9 +5,7 @@ const { connect } = require("../mongo")
 const cardsCollection = "cards"
 const cardsSchema = Joi.object({
     _id: Joi.object(),
-    columnID: Joi.object().required(),
-    message: Joi.string().min(1).max(50).required(),
-    position: Joi.number().integer().required()
+    message: Joi.string().min(1).max(50).required()
 })
 
 const getCard = async (req, res) => {
