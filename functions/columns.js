@@ -10,10 +10,14 @@ const columnsSchema = Joi.object({
     title: Joi.string().min(1).max(50).required(),
     cards: Joi.array().default([])
 })
+
 const getColumn = async (req, res) => {
     const db = await connect()
-    const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
-    if (res) res.send(column)
+    const column = await db.collection(columnsCollection).aggregate([
+        { $match: { _id: new ObjectId(req.params.id) } },
+        { $project: { cards: 0 } }
+    ]).toArray()
+    if (res) res.send(...column)
     return column
 }
 
@@ -36,8 +40,10 @@ const deleteColumn = async (req, res) => {
 const getColumnCards = async (req, res) => {
     const db = await connect()
     const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
-    if (res) res.send(column.cards)
-    return column.cards
+    const cards = await db.collection(cardsCollection).find({ _id: { $in: column.cards.map((card) => card._id) } }).toArray()
+    const sorted = column.cards.map((colCards) => cards.find((card) => card._id.toString() === colCards._id.toString()))
+    if (res) res.send(sorted)
+    return sorted
 }
 
 const updateColumnCards = async (db, columnID, cardID, position) => {
