@@ -11,6 +11,7 @@ const boardsSchema = Joi.object({
     columns: Joi.array().default([])
 })
 
+// Should it return board or board.title?
 const getBoard = async (req, res) => {
     const db = await connect()
     const board = await db.collection(boardsCollection).findOne({ _id: new ObjectId(req.params.id) })
@@ -28,12 +29,12 @@ const updateBoard = async (req, res) => {
     res.send({ "Message": `Updated board with id ${req.params.id}` })
 }
 
-// review later
-const getColumns = async (req, res) => {
+// board.columns only returns ID, figure out how can we use this data?
+const getBoardColumns = async (req, res) => {
     const db = await connect()
-    const columns = await db.collection(columnsCollection).find({ boardID: new ObjectId(req.params.id) }).toArray()
-    if (res) res.send(columns)
-    return columns
+    const board = await db.collection(boardsCollection).findOne({ _id: new ObjectId(req.params.id) })
+    if (res) res.send(board.columns)
+    return board.columns
 }
 
 const updateBoardColumns = async (db, boardID, columnID, position) => {
@@ -61,6 +62,6 @@ module.exports = {
     boardsSchema,
     getBoard,
     updateBoard,
-    getColumns,
+    getBoardColumns,
     createColumn
 }

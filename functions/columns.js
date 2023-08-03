@@ -33,20 +33,30 @@ const deleteColumn = async (req, res) => {
     res.send({ "Message": `Column with id ${req.params.id} successfully deleted` })
 }
 
-const getCards = async (req, res) => {
+const getColumnCards = async (req, res) => {
     const db = await connect()
-    const cards = await db.collection(cardsCollection).find({ columnID: new ObjectId(req.params.id) }).sort({ position: 1 }).toArray()
-    if (res) res.send(cards)
-    return cards
+    const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
+    if (res) res.send(column.cards)
+    return column.cards
+}
+
+const updateColumnCards = async (db, columnID, cardID, position) => {
+    const column = await db.collection(columnsCollection).findOne({ _id: columnID })
+    const cards = column.cards
+    column.cards = isEmpty(cards) ?
+        [{ _id: cardID }] :
+        [...cards.slice(0, position - 1), { _id: cardID }, ...cards.slice(position - 1)]
+    await db.collection(columnsCollection).updateOne({ _id: columnID }, { $set: column })
 }
 
 const createCard = async (req, res) => {
     const db = await connect()
-    const card = await db.collection(cardsCollection).findOne({ columnID: new ObjectId(req.params.id), position: req.body.position })
-    if (!isEmpty(card)) return res.send({ "Message": "Position already exists" })
-    const { error, value } = cardsSchema.validate({ ...req.body, columnID: new ObjectId(req.params.id) }, { abortEarly: false })
+    const columnID = new ObjectId(req.params.id)
+    const { position, ...body } = req.body
+    const { error, value } = cardsSchema.validate(body, { abortEarly: false })
     if (error) return res.send({ "Message": error.details.map((e) => e.message) })
-    await db.collection(cardsCollection).insertOne(value)
+    const card = await db.collection(cardsCollection).insertOne(value)
+    await updateColumnCards(db, columnID, card.insertedId, position)
     res.send({ "Message": `Created card for column with id ${req.params.id}` })
 }
 
@@ -56,6 +66,6 @@ module.exports = {
     getColumn,
     updateColumn,
     deleteColumn,
-    getCards,
+    getColumnCards,
     createCard
 }

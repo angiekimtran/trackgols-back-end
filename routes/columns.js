@@ -13,7 +13,7 @@ router.put('/:id', column.updateColumn)
 router.delete('/:id', column.deleteColumn)
 
 // get all card from a column
-router.get('/:id/cards', column.getCards)
+router.get('/:id/cards', column.getColumnCards)
 
 // create a card
 router.post('/:id/cards', column.createCard)

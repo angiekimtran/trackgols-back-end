@@ -10,7 +10,7 @@ router.get('/:id', board.getBoard)
 router.put('/:id', board.updateBoard)
 
 // get all columns
-router.get('/:id/columns', board.getColumns)
+router.get('/:id/columns', board.getBoardColumns)
 
 // create a column
 router.post('/:id/columns', board.createColumn)
