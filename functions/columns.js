@@ -33,6 +33,8 @@ const updateColumn = async (req, res) => {
 
 const deleteColumn = async (req, res) => {
     const db = await connect()
+    const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
+    await db.collection(cardsCollection).deleteMany({ _id: { $in: column.cards.map((card) => card._id) } })
     await db.collection(columnsCollection).deleteOne({ _id: new ObjectId(req.params.id) })
     res.send({ "Message": `Column with id ${req.params.id} successfully deleted` })
 }
