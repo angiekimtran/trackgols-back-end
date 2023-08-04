@@ -5,6 +5,8 @@ const { connect } = require("../mongo")
 const { cardsCollection, cardsSchema } = require("./cards")
 
 const columnsCollection = "columns"
+const boardsCollection = "boards"
+
 const columnsSchema = Joi.object({
     _id: Joi.object(),
     title: Joi.string().min(1).max(50).required(),
@@ -23,7 +25,7 @@ const getColumn = async (req, res) => {
 
 const updateColumn = async (req, res) => {
     const db = await connect()
-    const column = await getColumn(req)
+    const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
     const update = { ...column, ...req.body }
     const { error, value } = columnsSchema.validate(update, { abortEarly: false })
     if (error) return res.send({ "Message": error.details.map((e) => e.message) })
@@ -33,9 +35,15 @@ const updateColumn = async (req, res) => {
 
 const deleteColumn = async (req, res) => {
     const db = await connect()
-    const column = await db.collection(columnsCollection).findOne({ _id: new ObjectId(req.params.id) })
+    const _id = new ObjectId(req.params.id)
+    const column = await db.collection(columnsCollection).findOne({ _id })
+    const board = await db.collection(boardsCollection).findOne({ columns: { _id } })
+    board.columns = board.columns.filter((col) => col._id.toString() !== column._id.toString())
+
     await db.collection(cardsCollection).deleteMany({ _id: { $in: column.cards.map((card) => card._id) } })
-    await db.collection(columnsCollection).deleteOne({ _id: new ObjectId(req.params.id) })
+    await db.collection(boardsCollection).updateOne({ _id: board._id }, { $set: board })
+    await db.collection(columnsCollection).deleteOne({ _id })
+
     res.send({ "Message": `Column with id ${req.params.id} successfully deleted` })
 }
 
