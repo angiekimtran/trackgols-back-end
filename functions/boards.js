@@ -23,7 +23,7 @@ const getBoard = async (req, res) => {
 
 const updateBoard = async (req, res) => {
     const db = await connect()
-    const board = await getBoard(req)
+    const board = await db.collection(boardsCollection).findOne({ _id: new ObjectId(req.params.id) })
     const update = { ...board, ...req.body }
     const { error, value } = boardsSchema.validate(update, { abortEarly: false })
     if (error) return res.send({ "Message": error.details.map((e) => e.message) })
