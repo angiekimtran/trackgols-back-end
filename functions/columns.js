@@ -56,23 +56,23 @@ const getColumnCards = async (req, res) => {
     return sorted
 }
 
-const updateColumnCards = async (db, columnID, cardID, position) => {
+const updateColumnCards = async (db, columnID, cardID) => {
     const column = await db.collection(columnsCollection).findOne({ _id: columnID })
     const cards = column.cards
     column.cards = isEmpty(cards) ?
         [{ _id: cardID }] :
-        [...cards.slice(0, position - 1), { _id: cardID }, ...cards.slice(position - 1)]
+        [...cards, { _id: cardID }]
     await db.collection(columnsCollection).updateOne({ _id: columnID }, { $set: column })
 }
 
 const createCard = async (req, res) => {
     const db = await connect()
     const columnID = new ObjectId(req.params.id)
-    const { position, ...body } = req.body
+    const body = req.body
     const { error, value } = cardsSchema.validate(body, { abortEarly: false })
     if (error) return res.send({ "Message": error.details.map((e) => e.message) })
     const card = await db.collection(cardsCollection).insertOne(value)
-    await updateColumnCards(db, columnID, card.insertedId, position)
+    await updateColumnCards(db, columnID, card.insertedId)
     res.send({ "Message": `Created card for column with id ${req.params.id}` })
 }
 

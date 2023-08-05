@@ -40,23 +40,23 @@ const getBoardColumns = async (req, res) => {
     return sorted
 }
 
-const updateBoardColumns = async (db, boardID, columnID, position) => {
+const updateBoardColumns = async (db, boardID, columnID) => {
     const board = await db.collection(boardsCollection).findOne({ _id: boardID })
     const columns = board.columns
     board.columns = isEmpty(columns) ?
         [{ _id: columnID }] :
-        [...columns.slice(0, position - 1), { _id: columnID }, ...columns.slice(position - 1)]
+        [...columns, { _id: columnID }]
     await db.collection(boardsCollection).updateOne({ _id: boardID }, { $set: board })
 }
 
 const createColumn = async (req, res) => {
     const db = await connect()
     const boardID = new ObjectId(req.params.id)
-    const { position, ...body } = req.body
+    const body = req.body
     const { error, value } = columnsSchema.validate(body, { abortEarly: false })
     if (error) return res.send({ "Message": error.details.map((e) => e.message) })
     const column = await db.collection(columnsCollection).insertOne(value)
-    await updateBoardColumns(db, boardID, column.insertedId, position)
+    await updateBoardColumns(db, boardID, column.insertedId)
     res.send({ "Message": `Created column for board with id ${req.params.id}` })
 }
 
