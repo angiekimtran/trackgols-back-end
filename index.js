@@ -1,6 +1,7 @@
 require("dotenv").config()
 const express = require('express')
 const { createServer } = require('http')
+const cors = require('cors')
 
 const boardsRoute = require('./routes/boards')
 const cardsRoute = require('./routes/cards')
@@ -10,10 +11,7 @@ const bodyParser = require('body-parser')
 const PORT = process.env.PORT || 3001
 const app = express()
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-    next()
-})
+app.use(cors())
 
 app.use(bodyParser.json())
 app.use('/boards', boardsRoute)
