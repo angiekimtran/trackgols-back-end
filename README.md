@@ -23,6 +23,6 @@ TrackGols is a personalized web application designed for users to effectively tr
 
 ## Draft Technology Choices
 
-- Database: Mongodb
-- Backend: Express & Node.js
-- Front-end: React
+-   Database: Mongodb
+-   Backend: Express & Node.js
+-   Front-end: React
