@@ -7,7 +7,7 @@ const columnsCollection = 'columns'
 
 const cardsSchema = Joi.object({
     _id: Joi.object(),
-    message: Joi.string().min(1).max(50).required(),
+    message: Joi.string().trim().min(1).max(200).required(),
 })
 
 const getCard = async (req, res) => {

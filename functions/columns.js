@@ -9,7 +9,7 @@ const boardsCollection = 'boards'
 
 const columnsSchema = Joi.object({
     _id: Joi.object(),
-    title: Joi.string().min(1).max(50).required(),
+    title: Joi.string().trim().min(1).max(15).required(),
     cards: Joi.array().default([]),
 })
 

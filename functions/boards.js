@@ -7,7 +7,7 @@ const { isEmpty } = require('lodash')
 const boardsCollection = 'boards'
 const boardsSchema = Joi.object({
     _id: Joi.object(),
-    title: Joi.string().min(1).max(50).required(),
+    title: Joi.string().trim().min(1).max(50).required(),
     columns: Joi.array().default([]),
 })
 
