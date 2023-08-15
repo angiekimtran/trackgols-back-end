@@ -20,7 +20,7 @@ TrackGols is a personalized web application designed for users to effectively tr
 
 ## How To Set Up TrackGols's Back-end Layer
 -   Install docker and run these commands in the terminal:
-    -   docker pull mongodb/mongodb-community-server
+    -   ```docker pull mongodb/mongodb-community-server```
     -   docker run --name mongo -d mongodb/mongodb-community-server:latest
     -   docker container ls
     -   docker run -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 mongo
