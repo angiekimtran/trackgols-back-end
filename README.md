@@ -2,27 +2,44 @@
 
 TrackGols is a personalized web application designed for users to effectively track and manage their goals. This web application provides users with customizable goal tracking capabilities, enabling them to set goals, create columns, and visually track their progress by seamlessly dragging and dropping goals across different columns. With TrackGols, achieving your goals and keeping yourself accountable has never been more easy and fun!
 
-## MVP Feature Set
-
-(1) Add column button - brings up a new column with an add title and add card button
-(2) Add title button - brings up a title form to add a title name
-(3) Add card button - brings up a card form to add a card name with a message
-(3) Update title button - brings up the title form for users to edit the title name
-(4) Update card button - brings up the card form for users to edit the card name or message
-(5) Delete button - brings up a modal where users can select the boards or cards they want to delete
-(6) Users can drag and drop cards between columns
-
-### Potential Additional Features
-
-(1) Deployment
-(2) Users can create multiple boards
-(3) Users can sign in/create an account to save progress
-(4) Users can add a due date to a goal
-(5) A card tracks and displays the date a goal was created
-(6) Users can change the color theme of the board
-
-## Draft Technology Choices
+## Technology Stack
 
 -   Database: Mongodb
--   Backend: Express & Node.js
+-   Backend: Node.js & Express
 -   Front-end: React
+  
+## Dependencies
+
+-   brew
+-   npm
+-   node
+-   express
+-   mongodb
+-   docker
+
+## How To Set Up TrackGols's Back-end Layer
+-   Install docker and run these commands in the terminal:
+    -   docker pull mongodb/mongodb-community-server
+    -   docker run --name mongo -d mongodb/mongodb-community-server:latest
+    -   docker container ls
+    -   docker run -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 mongo
+-   Install mongo
+    -   brew tap mongodb/brew
+    -   brew install mongodb-community@6.0
+-   Run this code on the root directory to restore database:
+    -   mongorestore -d trackgols -u root -p root --authenticationDatabase admin --drop --stopOnError --gzip dataBackup/trackgols
+-   From the root directory do "npm install"
+-   Create a .env file on the root directory and add these variables:
+    -   PORT = 3001
+    -   CONNECTION_STRING = "mongodb://root:root@localhost:27017/"
+    -   DB_NAME = "trackgols"
+-   Do "npm start" to run the back-end server
+
+### Potential Future Enhancements
+
+-   Deployment
+-   Users can rearrange columns
+-   Users can create multiple boards
+-   Users can sign in/create an account to save progress
+-   Users can add a due date to a goal
+-   Users can change the color theme of the board
